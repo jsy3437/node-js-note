@@ -1,0 +1,2 @@
+// how to debug?
+"program": "${workspaceFolder}/app.js"
