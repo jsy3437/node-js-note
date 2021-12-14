@@ -21,7 +21,8 @@ app.post(
 	'/users',
 	// req의 body를 검사, 체이닝 가능
 	[
-		body('name').isLength({ min: 2 }).withMessage('이름은 두글자 이상!'),
+		// trim => 공백없애는 함수, 순서 중요
+		body('name').trim().isLength({ min: 2 }).withMessage('이름은 두글자 이상!'),
 		body('age').isInt().withMessage('숫자를 입력해'),
 		body('job.name').notEmpty(), // 객체 속을 검사할때는 .으로 구분
 		validate,
@@ -34,7 +35,8 @@ app.post(
 
 // email은 req의 param으로 들어와서 param으로 명시
 // check를 쓰면 모든 요소들중에 해당하는 요소로 검사할 수 있지만 해당 요소를 찾는것도 비용이 들어갈 수 있으므로 정확하게 명시해 주는 것이 좋다.
-app.get('/:email', param('email').isEmail().withMessage('이메일 입력해'), validate, (req, res, next) => {
+// normalizeEmail() => email의 대문자들을 소문자로 변환해준다
+app.get('/:email', param('email').isEmail().withMessage('이메일 입력해').normalizeEmail(), validate, (req, res, next) => {
 	res.send('📧');
 });
 
